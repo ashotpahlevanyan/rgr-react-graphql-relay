@@ -154,6 +154,44 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/API.js":
+/*!********************!*\
+  !*** ./src/API.js ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _jquery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var _ServerActions = __webpack_require__(/*! ./actions/ServerActions */ "./src/actions/ServerActions.js");
+
+var _ServerActions2 = _interopRequireDefault(_ServerActions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var API = {
+	fetchLinks: function fetchLinks() {
+		console.log('1. In API');
+
+		// Ajax request to read /data/links
+
+		(0, _jquery.get)("/data/links").done(function (resp) {
+			_ServerActions2.default.receiveLinks(resp);
+		});
+	}
+};
+
+exports.default = API;
+
+/***/ }),
+
 /***/ "./src/App.js":
 /*!********************!*\
   !*** ./src/App.js ***!
@@ -172,20 +210,101 @@ var _reactDom = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/i
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Hello = __webpack_require__(/*! ./components/Hello */ "./src/components/Hello.js");
+var _Main = __webpack_require__(/*! ./components/Main */ "./src/components/Main.js");
 
-var _Hello2 = _interopRequireDefault(_Hello);
+var _Main2 = _interopRequireDefault(_Main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(_Hello2.default, null), document.getElementById('react'));
+_reactDom2.default.render(_react2.default.createElement(_Main2.default, null), document.getElementById('react'));
 
 /***/ }),
 
-/***/ "./src/components/Hello.js":
-/*!*********************************!*\
-  !*** ./src/components/Hello.js ***!
-  \*********************************/
+/***/ "./src/AppDispatcher.js":
+/*!******************************!*\
+  !*** ./src/AppDispatcher.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _flux = __webpack_require__(/*! flux */ "./node_modules/flux/index.js");
+
+var _flux2 = _interopRequireDefault(_flux);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var AppDispatcher = new _flux2.default.Dispatcher();
+
+exports.default = AppDispatcher;
+
+/***/ }),
+
+/***/ "./src/Constants.js":
+/*!**************************!*\
+  !*** ./src/Constants.js ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var ActionTypes = exports.ActionTypes = {
+	RECEIVE_LINKS: 'RECEIVE_LINKS'
+};
+
+/***/ }),
+
+/***/ "./src/actions/ServerActions.js":
+/*!**************************************!*\
+  !*** ./src/actions/ServerActions.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _AppDispatcher = __webpack_require__(/*! ../AppDispatcher */ "./src/AppDispatcher.js");
+
+var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
+
+var _Constants = __webpack_require__(/*! ../Constants */ "./src/Constants.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ServerActions = {
+	receiveLinks: function receiveLinks(links) {
+		console.log("2. In ServerActions");
+		_AppDispatcher2.default.dispatch({
+			actionType: _Constants.ActionTypes.RECEIVE_LINKS,
+			links: links
+		});
+	}
+};
+
+exports.default = ServerActions;
+
+/***/ }),
+
+/***/ "./src/components/Main.js":
+/*!********************************!*\
+  !*** ./src/components/Main.js ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -202,6 +321,14 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _API = __webpack_require__(/*! ../API */ "./src/API.js");
+
+var _API2 = _interopRequireDefault(_API);
+
+var _LinkStore = __webpack_require__(/*! ../stores/LinkStore */ "./src/stores/LinkStore.js");
+
+var _LinkStore2 = _interopRequireDefault(_LinkStore);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -210,30 +337,116 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Hello = function (_React$Component) {
-	_inherits(Hello, _React$Component);
+var Main = function (_React$Component) {
+	_inherits(Main, _React$Component);
 
-	function Hello() {
-		_classCallCheck(this, Hello);
+	function Main() {
+		_classCallCheck(this, Main);
 
-		return _possibleConstructorReturn(this, (Hello.__proto__ || Object.getPrototypeOf(Hello)).apply(this, arguments));
+		return _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).apply(this, arguments));
 	}
 
-	_createClass(Hello, [{
+	_createClass(Main, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			_API2.default.fetchLinks();
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
-				'h3',
+				'div',
 				null,
-				'Hello React bebe!'
+				_react2.default.createElement(
+					'h3',
+					null,
+					'Links'
+				),
+				_react2.default.createElement(
+					'ul',
+					null,
+					_react2.default.createElement(
+						'li',
+						null,
+						'Link ...'
+					),
+					_react2.default.createElement(
+						'li',
+						null,
+						'Link ...'
+					)
+				)
 			);
 		}
 	}]);
 
-	return Hello;
+	return Main;
 }(_react2.default.Component);
 
-exports.default = Hello;
+exports.default = Main;
+
+/***/ }),
+
+/***/ "./src/stores/LinkStore.js":
+/*!*********************************!*\
+  !*** ./src/stores/LinkStore.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _AppDispatcher = __webpack_require__(/*! ../AppDispatcher */ "./src/AppDispatcher.js");
+
+var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
+
+var _Constants = __webpack_require__(/*! ../Constants */ "./src/Constants.js");
+
+var _events = __webpack_require__(/*! events */ "./node_modules/node-libs-browser/node_modules/events/events.js");
+
+var _events2 = _interopRequireDefault(_events);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _links = [];
+
+var LinkStore = function (_EventEmitter) {
+	_inherits(LinkStore, _EventEmitter);
+
+	function LinkStore(props) {
+		_classCallCheck(this, LinkStore);
+
+		var _this = _possibleConstructorReturn(this, (LinkStore.__proto__ || Object.getPrototypeOf(LinkStore)).call(this, props));
+
+		_AppDispatcher2.default.register(function (action) {
+			switch (action.actionType) {
+				case _Constants.ActionTypes.RECEIVE_LINKS:
+					console.log('3. In Store');
+					_links = action.links;
+					_this.emit('change');
+					break;
+				default:
+				// do nothing
+			}
+		});
+		return _this;
+	}
+
+	return LinkStore;
+}(_events2.default);
+
+exports.default = new LinkStore();
 
 /***/ }),
 
