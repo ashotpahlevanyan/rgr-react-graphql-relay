@@ -10,13 +10,16 @@
   "scripts": {
     "babel-node": "./node_modules/.bin/babel-node",
     "webpack": "webpack -w",
-    "start": "nodemon --exec npm run babel-node -- server.js & npm run webpack",
+    "nodemon": "./node_modules/.bin/nodemon --exec \"npm run babel-node -- server.js\"",
+    "start": "npm run nodemon & npm run webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
+    "kerberos": "0.0.24",
+    "mongodb": "^3.1.0",
     "nodemon": "^1.17.5",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
