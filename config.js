@@ -1,1 +1,0 @@
-export const MONGO_URL= 'mongodb://rgrjs:Ash548834@ds121861.mlab.com:21861/rgrjs';
