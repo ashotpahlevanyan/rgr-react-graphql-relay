@@ -5,16 +5,26 @@ import {MONGO_URL} from './config';
 
 app.use(express.static('public'));
 
-app.listen(3000);
-
+const Port = process.env.port || 3000;
+let db;
 
 MongoClient.connect(MONGO_URL, { useNewUrlParser: true }).then((connection) => {
-	let db = connection.db('rgrjs');
+	db = connection.db('rgrjs');
 	db.collection('links').find({}).toArray((err, links) => {
 		if(err) throw err;
+
+		app.listen(Port, () => console.log(`App listening on port ${Port}`));
 
 		console.log(JSON.stringify(links));
 	});
 }).catch((error) => {
 	console.log('ERROR', error);
+});
+
+app.get('/data/links', (req, res) => {
+	db.collection('links').find({}).toArray((err, links) => {
+		if (err) throw err;
+
+		res.json(links);
+	})
 });
