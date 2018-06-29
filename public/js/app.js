@@ -337,23 +337,54 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var _getAppState = function _getAppState() {
+	return { links: _LinkStore2.default.getAll() };
+};
+
 var Main = function (_React$Component) {
 	_inherits(Main, _React$Component);
 
-	function Main() {
+	function Main(props) {
 		_classCallCheck(this, Main);
 
-		return _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
+
+		_this.state = _getAppState();
+		_this.onChange = _this.onChange.bind(_this);
+		return _this;
 	}
 
 	_createClass(Main, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			_API2.default.fetchLinks();
+			_LinkStore2.default.on('change', this.onChange);
+		}
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			_LinkStore2.default.removeListener('change', this.onChange);
+		}
+	}, {
+		key: 'onChange',
+		value: function onChange() {
+			console.log('4. In OnChange In the view');
+			this.setState(_getAppState());
 		}
 	}, {
 		key: 'render',
 		value: function render() {
+			var content = this.state.links.map(function (link) {
+				return _react2.default.createElement(
+					'li',
+					{ key: link._id },
+					_react2.default.createElement(
+						'a',
+						{ href: link.url },
+						link.title
+					)
+				);
+			});
 			return _react2.default.createElement(
 				'div',
 				null,
@@ -365,16 +396,7 @@ var Main = function (_React$Component) {
 				_react2.default.createElement(
 					'ul',
 					null,
-					_react2.default.createElement(
-						'li',
-						null,
-						'Link ...'
-					),
-					_react2.default.createElement(
-						'li',
-						null,
-						'Link ...'
-					)
+					content
 				)
 			);
 		}
@@ -400,6 +422,8 @@ exports.default = Main;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _AppDispatcher = __webpack_require__(/*! ../AppDispatcher */ "./src/AppDispatcher.js");
 
@@ -442,6 +466,13 @@ var LinkStore = function (_EventEmitter) {
 		});
 		return _this;
 	}
+
+	_createClass(LinkStore, [{
+		key: 'getAll',
+		value: function getAll() {
+			return _links;
+		}
+	}]);
 
 	return LinkStore;
 }(_events2.default);

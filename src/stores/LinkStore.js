@@ -19,6 +19,10 @@ class LinkStore extends EventEmitter {
 			}
 		});
 	}
+
+	getAll() {
+		return _links;
+	}
 }
 
 export default new LinkStore();
