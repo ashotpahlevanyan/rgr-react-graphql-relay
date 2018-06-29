@@ -1,9 +1,12 @@
+const path = require('path');
+
 module.exports = {
 	mode: 'development',
-	entry: "./public/js/app.js",
+	entry: {
+		app: ["./src/App.js"]
+	},
 	output: {
-		path: __dirname + '/public',
-		filename: 'bundle.js'
+		path: path.resolve(__dirname, './public/js'),
 	},
 	module: {
 		rules: [
@@ -15,5 +18,24 @@ module.exports = {
 				},
 			}
 		]
-	}
+	},
+	optimization: {
+		splitChunks: {
+			cacheGroups: {
+				vendor: {
+					chunks: 'initial',
+					test: path.resolve(__dirname, 'node_modules'),
+					name: 'vendor',
+					enforce: true,
+				},
+				app: {
+					chunks: 'initial',
+					test: 'app',
+					name: 'app',
+					enforce: true,
+				},
+			},
+		},
+	},
+	devtool: "cheap-module-eval-source-map"
 };
