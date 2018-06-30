@@ -17,12 +17,8 @@ class Main extends React.Component {
 		limit: 3
 	};
 
-	constructor(props) {
-		super(props);
+	state = _getAppState();
 
-		this.state = _getAppState();
-		this.onChange = this.onChange.bind(this);
-	}
 	componentDidMount() {
 		API.fetchLinks();
 		LinkStore.on('change', this.onChange);
@@ -31,10 +27,11 @@ class Main extends React.Component {
 		LinkStore.removeListener('change', this.onChange);
 	}
 
-	onChange() {
+	onChange = () => {
 		console.log('4. In OnChange In the view');
 		this.setState(_getAppState());
-	}
+	};
+
 	render() {
 		let content = this.state.links.slice(0, this.props.limit).map((link) => {
 			return (

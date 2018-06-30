@@ -350,14 +350,21 @@ var _getAppState = function _getAppState() {
 var Main = function (_React$Component) {
 	_inherits(Main, _React$Component);
 
-	function Main(props) {
+	function Main() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
 		_classCallCheck(this, Main);
 
-		var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
 
-		_this.state = _getAppState();
-		_this.onChange = _this.onChange.bind(_this);
-		return _this;
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.state = _getAppState(), _this.onChange = function () {
+			console.log('4. In OnChange In the view');
+			_this.setState(_getAppState());
+		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	_createClass(Main, [{
@@ -370,12 +377,6 @@ var Main = function (_React$Component) {
 		key: 'componentWillUnmount',
 		value: function componentWillUnmount() {
 			_LinkStore2.default.removeListener('change', this.onChange);
-		}
-	}, {
-		key: 'onChange',
-		value: function onChange() {
-			console.log('4. In OnChange In the view');
-			this.setState(_getAppState());
 		}
 	}, {
 		key: 'render',

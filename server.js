@@ -24,7 +24,7 @@ MongoClient.connect(MONGO_URL, { useNewUrlParser: true }).then((connection) => {
 
 		app.listen(Port, () => console.log(`App listening on port ${Port}`));
 
-		console.log(JSON.stringify(links));
+		// console.log(JSON.stringify(links));
 	});
 }).catch((error) => {
 	console.log('ERROR', error);
