@@ -30,10 +30,11 @@ MongoClient.connect(MONGO_URL, { useNewUrlParser: true }).then((connection) => {
 	console.log('ERROR', error);
 });
 
-app.get('/data/links', (req, res) => {
-	db.collection('links').find({}).toArray((err, links) => {
-		if (err) throw err;
-
-		res.json(links);
-	})
-});
+//
+// app.get('/data/links', (req, res) => {
+// 	db.collection('links').find({}).toArray((err, links) => {
+// 		if (err) throw err;
+//
+// 		res.json(links);
+// 	})
+// });

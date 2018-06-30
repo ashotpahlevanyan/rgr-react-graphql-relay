@@ -182,8 +182,10 @@ var API = {
 
 		// Ajax request to read /data/links
 
-		(0, _jquery.get)("/data/links").done(function (resp) {
-			_ServerActions2.default.receiveLinks(resp);
+		(0, _jquery.post)("/graphql", {
+			query: '{\n\t\t\t\tlinks {\n\t\t\t\t\t_id,\n\t\t\t\t\ttitle,\n\t\t\t\t\turl\n\t\t\t\t}\n\t\t\t}'
+		}).done(function (resp) {
+			_ServerActions2.default.receiveLinks(resp.data.links);
 		});
 	}
 };
@@ -216,7 +218,7 @@ var _Main2 = _interopRequireDefault(_Main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(_Main2.default, null), document.getElementById('react'));
+_reactDom2.default.render(_react2.default.createElement(_Main2.default, { limit: 4 }), document.getElementById('react'));
 
 /***/ }),
 
@@ -374,7 +376,7 @@ var Main = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var content = this.state.links.map(function (link) {
+			var content = this.state.links.slice(0, this.props.limit).map(function (link) {
 				return _react2.default.createElement(
 					'li',
 					{ key: link._id },
