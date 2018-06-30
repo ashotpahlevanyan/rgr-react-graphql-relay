@@ -8,7 +8,8 @@ import GraphQLHTTP from 'express-graphql';
 app.use(express.static('public'));
 
 app.use('/graphql', GraphQLHTTP({
-	schema
+	schema,
+	graphiql: true
 }));
 
 const Port = process.env.port || 3000;
