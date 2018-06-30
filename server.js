@@ -2,8 +2,14 @@ import express from 'express';
 import { MongoClient, Server } from 'mongodb';
 let app = express();
 import {MONGO_URL} from './config';
+import schema from './data/schema';
+import GraphQLHTTP from 'express-graphql';
 
 app.use(express.static('public'));
+
+app.use('/graphql', GraphQLHTTP({
+	schema
+}));
 
 const Port = process.env.port || 3000;
 let db;
