@@ -1,4 +1,5 @@
 const path = require('path');
+const babelRelayPlugin = require('./babelRelayPlugin');
 
 module.exports = {
 	mode: 'development',
@@ -14,10 +15,11 @@ module.exports = {
 				test: /\.(js|jsx)$/,
 				loader: 'babel-loader',
 				options: {
-					presets: ['env', 'react', 'es2015', 'stage-0'],
+					presets: ['env', 'react', 'es2015', 'stage-0']
 				},
 			}
-		]
+		],
+
 	},
 	optimization: {
 		splitChunks: {
