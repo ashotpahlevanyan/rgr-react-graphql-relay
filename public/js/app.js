@@ -416,7 +416,7 @@ Main.propTypes = {
 	limit: _propTypes2.default.number
 };
 Main.defaultProps = {
-	limit: 3
+	limit: 2
 };
 exports.default = Main;
 

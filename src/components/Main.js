@@ -14,7 +14,7 @@ class Main extends React.Component {
 	};
 
 	static defaultProps = {
-		limit: 3
+		limit: 2
 	};
 
 	state = _getAppState();

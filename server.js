@@ -7,34 +7,17 @@ import GraphQLHTTP from 'express-graphql';
 
 app.use(express.static('public'));
 
-
 const Port = process.env.port || 3000;
 let db;
 
-MongoClient.connect(MONGO_URL, { useNewUrlParser: true }).then((connection) => {
+(async () => {
+	let connection = await MongoClient.connect(MONGO_URL, { useNewUrlParser: true });
 	db = connection.db('rgrjs');
-	db.collection('links').find({}).toArray((err, links) => {
-		if(err) throw err;
 
-
-		app.use('/graphql', GraphQLHTTP({
+	app.use('/graphql', GraphQLHTTP({
 			schema: schema(db),
 			graphiql: true
-		}));
+	}));
 
-		app.listen(Port, () => console.log(`App listening on port ${Port}`));
-
-		// console.log(JSON.stringify(links));
-	});
-}).catch((error) => {
-	console.log('ERROR', error);
-});
-
-//
-// app.get('/data/links', (req, res) => {
-// 	db.collection('links').find({}).toArray((err, links) => {
-// 		if (err) throw err;
-//
-// 		res.json(links);
-// 	})
-// });
+	app.listen(Port, () => console.log(`App listening on port ${Port}`));
+})();
