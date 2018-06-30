@@ -3,6 +3,6 @@ import ReactDOM from 'react-dom';
 import Main from './components/Main';
 
 ReactDOM.render(
-	<Main limit={4} />,
+	<Main />,
 	document.getElementById('react')
 );

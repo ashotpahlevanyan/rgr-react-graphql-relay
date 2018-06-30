@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import API from '../API';
 import LinkStore from '../stores/LinkStore';
 
@@ -7,6 +8,15 @@ let _getAppState = () => {
 };
 
 class Main extends React.Component {
+
+	static propTypes = {
+		limit: PropTypes.number
+	};
+
+	static defaultProps = {
+		limit: 3
+	};
+
 	constructor(props) {
 		super(props);
 

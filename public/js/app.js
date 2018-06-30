@@ -218,7 +218,7 @@ var _Main2 = _interopRequireDefault(_Main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(_Main2.default, { limit: 4 }), document.getElementById('react'));
+_reactDom2.default.render(_react2.default.createElement(_Main2.default, null), document.getElementById('react'));
 
 /***/ }),
 
@@ -323,6 +323,10 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _API = __webpack_require__(/*! ../API */ "./src/API.js");
 
 var _API2 = _interopRequireDefault(_API);
@@ -407,6 +411,12 @@ var Main = function (_React$Component) {
 	return Main;
 }(_react2.default.Component);
 
+Main.propTypes = {
+	limit: _propTypes2.default.number
+};
+Main.defaultProps = {
+	limit: 3
+};
 exports.default = Main;
 
 /***/ }),
