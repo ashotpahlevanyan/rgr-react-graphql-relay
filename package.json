@@ -10,7 +10,7 @@
   "scripts": {
     "babel-node": "./node_modules/.bin/babel-node",
     "webpack": "webpack -w",
-    "nodemon": "./node_modules/.bin/nodemon --ignore data/schema.json --exec \"npm run babel-node -- server.js\"",
+    "nodemon": "./node_modules/.bin/nodemon --exec \"npm run babel-node -- server.js\"",
     "start": "npm run nodemon & npm run webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

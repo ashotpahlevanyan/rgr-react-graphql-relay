@@ -1,4 +1,11 @@
 {
+  "restartable": "rs",
   "verbose": true,
-  "ignore": ["data/schema.json"]
+  "ignore": [
+    ".git",
+    "node_modules/",
+    "data/schema.json"],
+  "execMap": {
+    "js": "node --harmony"
+  }
 }

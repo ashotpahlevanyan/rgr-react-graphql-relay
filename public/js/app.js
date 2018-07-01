@@ -176,31 +176,44 @@ var _Main = __webpack_require__(/*! ./components/Main */ "./src/components/Main.
 
 var _Main2 = _interopRequireDefault(_Main);
 
-var _reactRelayClassic = __webpack_require__(/*! react-relay/react-relay-classic */ "./node_modules/react-relay/react-relay-classic.js");
+var _classic = __webpack_require__(/*! react-relay/classic */ "./node_modules/react-relay/classic.js");
 
-var _reactRelayClassic2 = _interopRequireDefault(_reactRelayClassic);
+var _classic2 = _interopRequireDefault(_classic);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(_Main2.default, null), document.getElementById('react'));
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-console.log(function () {
-	return {
-		children: [{
-			fieldName: 'title',
-			kind: 'Field',
-			metadata: {},
-			type: 'String'
-		}],
-		fieldName: 'links',
-		kind: 'Query',
-		metadata: {
-			isPlural: true
-		},
-		name: 'Test',
-		type: 'Link'
-	};
-}());
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HomeRoute = function (_Relay$Route) {
+	_inherits(HomeRoute, _Relay$Route);
+
+	function HomeRoute() {
+		_classCallCheck(this, HomeRoute);
+
+		return _possibleConstructorReturn(this, (HomeRoute.__proto__ || Object.getPrototypeOf(HomeRoute)).apply(this, arguments));
+	}
+
+	return HomeRoute;
+}(_classic2.default.Route);
+
+HomeRoute.routeName = 'Home';
+HomeRoute.queries = {
+	store: function store(Component) {
+		return function () {
+			throw new Error('Relay transform error ``You supplied a GraphQL document named `App` with invalid syntax. It must start with `fragment`, `mutation`, `query`, or `subscription`.`` in file `/Users/ashotpahlevanyan/MyProjects/rogerreactgraphrelay/src/App.js`. Try updating your GraphQL schema if an argument/field/type was recently added.');
+		}();
+	}
+};
+
+
+_reactDom2.default.render(_react2.default.createElement(_classic2.default.RootContainer, {
+	Component: _Main2.default,
+	route: new HomeRoute()
+}), document.getElementById('react'));
 
 /***/ }),
 
@@ -228,6 +241,10 @@ var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-type
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _classic = __webpack_require__(/*! react-relay/classic */ "./node_modules/react-relay/classic.js");
+
+var _classic2 = _interopRequireDefault(_classic);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -248,7 +265,7 @@ var Main = function (_React$Component) {
 	_createClass(Main, [{
 		key: 'render',
 		value: function render() {
-			var content = this.state.links.slice(0, this.props.limit).map(function (link) {
+			var content = this.props.store.links.slice(0, this.props.limit).map(function (link) {
 				return _react2.default.createElement(
 					'li',
 					{ key: link._id },
@@ -279,12 +296,56 @@ var Main = function (_React$Component) {
 	return Main;
 }(_react2.default.Component);
 
+// Declare the data requirements for this component
+
+
 Main.propTypes = {
 	limit: _propTypes2.default.number
 };
 Main.defaultProps = {
 	limit: 2
 };
+Main = _classic2.default.createContainer(Main, {
+	fragments: {
+		store: function store() {
+			return function () {
+				return {
+					children: [{
+						children: [{
+							fieldName: '_id',
+							kind: 'Field',
+							metadata: {},
+							type: 'String'
+						}, {
+							fieldName: 'title',
+							kind: 'Field',
+							metadata: {},
+							type: 'String'
+						}, {
+							fieldName: 'url',
+							kind: 'Field',
+							metadata: {},
+							type: 'String'
+						}],
+						fieldName: 'links',
+						kind: 'Field',
+						metadata: {
+							canHaveSubselections: true,
+							isPlural: true
+						},
+						type: 'Link'
+					}],
+					id: _classic2.default.QL.__id(),
+					kind: 'Fragment',
+					metadata: {},
+					name: 'Main_StoreRelayQL',
+					type: 'Store'
+				};
+			}();
+		}
+	}
+});
+
 exports.default = Main;
 
 /***/ }),
