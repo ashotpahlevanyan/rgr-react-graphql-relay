@@ -1,11 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import API from '../API';
-import LinkStore from '../stores/LinkStore';
-
-let _getAppState = () => {
-	return {links: LinkStore.getAll()};
-};
 
 class Main extends React.Component {
 
@@ -15,21 +9,6 @@ class Main extends React.Component {
 
 	static defaultProps = {
 		limit: 2
-	};
-
-	state = _getAppState();
-
-	componentDidMount() {
-		API.fetchLinks();
-		LinkStore.on('change', this.onChange);
-	}
-	componentWillUnmount() {
-		LinkStore.removeListener('change', this.onChange);
-	}
-
-	onChange = () => {
-		console.log('4. In OnChange In the view');
-		this.setState(_getAppState());
 	};
 
 	render() {
