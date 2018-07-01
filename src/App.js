@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
-import Relay from 'react-relay';
+import Relay from 'react-relay/react-relay-classic';
 
 ReactDOM.render(
 	<Main />,

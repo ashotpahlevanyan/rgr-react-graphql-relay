@@ -1,21 +1,23 @@
 const path = require('path');
-const babelRelayPlugin = require('./babelRelayPlugin');
+// const babelRelayPlugin = require('./babelRelayPlugin');
 
 module.exports = {
-	mode: 'development',
+	mode: "development",
 	entry: {
 		app: ["./src/App.js"]
 	},
 	output: {
-		path: path.resolve(__dirname, './public/js'),
+		path: path.resolve(__dirname, "./public/js"),
 	},
 	module: {
 		rules: [
 			{
 				test: /\.(js|jsx)$/,
-				loader: 'babel-loader',
+				loader: "babel-loader",
+				exclude: /node_modules/,
 				options: {
-					presets: ['env', 'react', 'es2015', 'stage-0']
+					presets: ["env", "react", "es2015", "stage-0"],
+					plugins: [path.resolve(__dirname, "./babelRelayPlugin")]
 				},
 			}
 		],
@@ -25,15 +27,15 @@ module.exports = {
 		splitChunks: {
 			cacheGroups: {
 				vendor: {
-					chunks: 'initial',
-					test: path.resolve(__dirname, 'node_modules'),
-					name: 'vendor',
+					chunks: "initial",
+					test: path.resolve(__dirname, "node_modules"),
+					name: "vendor",
 					enforce: true,
 				},
 				app: {
-					chunks: 'initial',
-					test: 'app',
-					name: 'app',
+					chunks: "initial",
+					test: "app",
+					name: "app",
 					enforce: true,
 				},
 			},
