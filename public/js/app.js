@@ -217,6 +217,98 @@ _reactDom2.default.render(_react2.default.createElement(_classic2.default.RootCo
 
 /***/ }),
 
+/***/ "./src/components/Link.js":
+/*!********************************!*\
+  !*** ./src/components/Link.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classic = __webpack_require__(/*! react-relay/classic */ "./node_modules/react-relay/classic.js");
+
+var _classic2 = _interopRequireDefault(_classic);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Link = function (_React$Component) {
+	_inherits(Link, _React$Component);
+
+	function Link() {
+		_classCallCheck(this, Link);
+
+		return _possibleConstructorReturn(this, (Link.__proto__ || Object.getPrototypeOf(Link)).apply(this, arguments));
+	}
+
+	_createClass(Link, [{
+		key: 'render',
+		value: function render() {
+			var link = this.props.link;
+
+			return _react2.default.createElement(
+				'li',
+				null,
+				_react2.default.createElement(
+					'a',
+					{ href: link.url },
+					link.title
+				)
+			);
+		}
+	}]);
+
+	return Link;
+}(_react2.default.Component);
+
+Link = _classic2.default.createContainer(Link, {
+	fragments: {
+		link: function link() {
+			return function () {
+				return {
+					children: [{
+						fieldName: 'url',
+						kind: 'Field',
+						metadata: {},
+						type: 'String'
+					}, {
+						fieldName: 'title',
+						kind: 'Field',
+						metadata: {},
+						type: 'String'
+					}],
+					id: _classic2.default.QL.__id(),
+					kind: 'Fragment',
+					metadata: {},
+					name: 'Link_LinkRelayQL',
+					type: 'Link'
+				};
+			}();
+		}
+	}
+});
+
+exports.default = Link;
+
+/***/ }),
+
 /***/ "./src/components/Main.js":
 /*!********************************!*\
   !*** ./src/components/Main.js ***!
@@ -245,6 +337,10 @@ var _classic = __webpack_require__(/*! react-relay/classic */ "./node_modules/re
 
 var _classic2 = _interopRequireDefault(_classic);
 
+var _Link = __webpack_require__(/*! ./Link */ "./src/components/Link.js");
+
+var _Link2 = _interopRequireDefault(_Link);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -266,15 +362,7 @@ var Main = function (_React$Component) {
 		key: 'render',
 		value: function render() {
 			var content = this.props.store.links.slice(0, this.props.limit).map(function (link) {
-				return _react2.default.createElement(
-					'li',
-					{ key: link._id },
-					_react2.default.createElement(
-						'a',
-						{ href: link.url },
-						link.title
-					)
-				);
+				return _react2.default.createElement(_Link2.default, { key: link._id, link: link });
 			});
 			return _react2.default.createElement(
 				'div',
@@ -308,25 +396,15 @@ Main.defaultProps = {
 Main = _classic2.default.createContainer(Main, {
 	fragments: {
 		store: function store() {
-			return function () {
+			return function (RQL_0) {
 				return {
 					children: [{
-						children: [{
+						children: [].concat.apply([], [{
 							fieldName: '_id',
 							kind: 'Field',
 							metadata: {},
 							type: 'String'
-						}, {
-							fieldName: 'title',
-							kind: 'Field',
-							metadata: {},
-							type: 'String'
-						}, {
-							fieldName: 'url',
-							kind: 'Field',
-							metadata: {},
-							type: 'String'
-						}],
+						}, _classic2.default.QL.__frag(RQL_0)]),
 						fieldName: 'links',
 						kind: 'Field',
 						metadata: {
@@ -341,7 +419,7 @@ Main = _classic2.default.createContainer(Main, {
 					name: 'Main_StoreRelayQL',
 					type: 'Store'
 				};
-			}();
+			}(_Link2.default.getFragment('link'));
 		}
 	}
 });

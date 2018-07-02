@@ -9,15 +9,6 @@ import {
 let Schema = (db) => {
 	let store = {};
 
-	let linkType = new GraphQLObjectType({
-		name: 'Link',
-		fields: () => ({
-			_id: { type: GraphQLString },
-			title: { type: GraphQLString },
-			url: { type: GraphQLString }
-		})
-	});
-
 	let storeType = new GraphQLObjectType({
 		name: 'Store',
 		fields: () => ({
@@ -27,6 +18,17 @@ let Schema = (db) => {
 			}
 		})
 	});
+
+	let linkType = new GraphQLObjectType({
+		name: 'Link',
+		fields: () => ({
+			_id: { type: GraphQLString },
+			title: { type: GraphQLString },
+			url: { type: GraphQLString }
+		})
+	});
+
+
 
 	let schema = new GraphQLSchema({
 		query: new GraphQLObjectType({
