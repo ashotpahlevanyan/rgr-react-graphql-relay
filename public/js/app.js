@@ -553,6 +553,13 @@ var Link = function (_React$Component) {
 				marginRight: '0.5.em'
 			};
 		}, _this.dateLabel = function () {
+			var _this$props = _this.props,
+			    link = _this$props.link,
+			    relay = _this$props.relay;
+
+			if (relay.hasOptimisticUpdate(link)) {
+				return 'Saving ...';
+			}
 			return (0, _moment2.default)(_this.props.link.createdAt).format('L');
 		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
@@ -586,7 +593,37 @@ Link = _classic2.default.createContainer(Link, {
 	fragments: {
 		link: function link() {
 			return function () {
-				throw new Error('GraphQL validation error ``Cannot query field "createdAt" on type "Link".`` in file `/Users/ashotpahlevanyan/MyProjects/rogerreactgraphrelay/src/components/Link.js`. Try updating your GraphQL schema if an argument/field/type was recently added.');
+				return {
+					children: [{
+						fieldName: 'url',
+						kind: 'Field',
+						metadata: {},
+						type: 'String'
+					}, {
+						fieldName: 'title',
+						kind: 'Field',
+						metadata: {},
+						type: 'String'
+					}, {
+						fieldName: 'createdAt',
+						kind: 'Field',
+						metadata: {},
+						type: 'String'
+					}, {
+						fieldName: 'id',
+						kind: 'Field',
+						metadata: {
+							isGenerated: true,
+							isRequisite: true
+						},
+						type: 'ID'
+					}],
+					id: _classic2.default.QL.__id(),
+					kind: 'Fragment',
+					metadata: {},
+					name: 'Link_LinkRelayQL',
+					type: 'Link'
+				};
 			}();
 		}
 	}
@@ -632,6 +669,8 @@ var _CreateLinkMutation = __webpack_require__(/*! ../mutations/CreateLinkMutatio
 
 var _CreateLinkMutation2 = _interopRequireDefault(_CreateLinkMutation);
 
+var _lodash = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -643,21 +682,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Main = function (_React$Component) {
 	_inherits(Main, _React$Component);
 
-	function Main() {
-		var _ref;
-
-		var _temp, _this, _ret;
-
+	function Main(props) {
 		_classCallCheck(this, Main);
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+		var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.setLimit = function (e) {
+		_this.setLimit = function (e) {
 			var newLimit = Number(e.target.value);
 			_this.props.relay.setVariables({ limit: newLimit });
-		}, _this.handleSubmit = function (e) {
+		};
+
+		_this.handleSubmit = function (e) {
 			e.preventDefault();
 			// Mutate
 			_classic2.default.Store.update(new _CreateLinkMutation2.default({
@@ -667,7 +702,16 @@ var Main = function (_React$Component) {
 			}));
 			_this.refs.newTitle.value = "";
 			_this.refs.newUrl.value = "";
-		}, _temp), _possibleConstructorReturn(_this, _ret);
+		};
+
+		_this.search = function (e) {
+			e.preventDefault();
+			var query = e.target.value;
+			_this.props.relay.setVariable({ query: query });
+		};
+
+		_this.search = (0, _lodash.debounce)(_this.search, 300);
+		return _this;
 	}
 
 	_createClass(Main, [{
@@ -696,6 +740,7 @@ var Main = function (_React$Component) {
 					)
 				),
 				'Showing: \xA0',
+				_react2.default.createElement('input', { type: 'text', placeholder: 'Search', onChange: this.search }),
 				_react2.default.createElement(
 					'select',
 					{ onChange: this.setLimit,
@@ -728,12 +773,13 @@ var Main = function (_React$Component) {
 
 Main = _classic2.default.createContainer(Main, {
 	initialVariables: {
-		limit: 10
+		limit: 10,
+		query: ''
 	},
 	fragments: {
 		store: function store() {
 			return function () {
-				throw new Error('Relay transform error ``You supplied a GraphQL document named `Main` that uses template substitution for an argument value, but variable substitution has not been enabled.`` in file `/Users/ashotpahlevanyan/MyProjects/rogerreactgraphrelay/src/components/Main.js`. Try updating your GraphQL schema if an argument/field/type was recently added.');
+				throw new Error('GraphQL validation error ``Unknown argument "query" on field "linkConnection" of type "Store". Cannot query field "_id" on type "Link". Did you mean "id"?`` in file `/Users/ashotpahlevanyan/MyProjects/rogerreactgraphrelay/src/components/Main.js`. Try updating your GraphQL schema if an argument/field/type was recently added.');
 			}();
 		}
 	}
@@ -815,6 +861,18 @@ var CreateLinkMutation = function (_Relay$Mutation) {
 					'': 'prepend'
 				}
 			}];
+		}
+	}, {
+		key: 'getOptimisticResponse',
+		value: function getOptimisticResponse() {
+			return {
+				linkEdge: {
+					node: {
+						title: this.props.title,
+						url: this.props.url
+					}
+				}
+			};
 		}
 	}]);
 
