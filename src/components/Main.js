@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import Relay from 'react-relay/classic';
 import Link from './Link';
 import CreateLinkMutation from '../mutations/CreateLinkMutation';
+import { debounce } from 'lodash';
 
 class Main extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.search = debounce(this.search, 300);
+	}
 	setLimit = (e) => {
 		let newLimit = Number(e.target.value);
 		this.props.relay.setVariables({limit: newLimit});
