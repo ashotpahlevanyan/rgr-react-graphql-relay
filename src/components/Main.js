@@ -22,6 +22,11 @@ class Main extends React.Component {
 		this.refs.newTitle.value = "";
 		this.refs.newUrl.value = "";
 	};
+	search = (e) => {
+		e.preventDefault();
+		let query = e.target.value;
+		this.props.relay.setVariable({ query });
+	};
 	render() {
 		let content = this.props.store.linkConnection.edges.map(edge => {
 			return (
@@ -36,6 +41,7 @@ class Main extends React.Component {
 					<button type="submit">Add</button>
 				</form>
 				Showing: &nbsp;
+				<input type="text" placeholder="Search" onChange={this.search} />
 				<select onChange={this.setLimit}
 						defaultValue={this.props.relay.variables.limit}>
 					<option value="100">100</option>
@@ -52,13 +58,14 @@ class Main extends React.Component {
 // Declare the data requirements for this component
 Main = Relay.createContainer(Main, {
 	initialVariables : {
-		limit: 10
+		limit: 10,
+		query: ''
 	},
 	fragments: {
 		store: () => Relay.QL`
 		fragment on Store {
 			id,
-			linkConnection (first: ${limit}) {
+			linkConnection (first: $limit, query: $query) {
 				edges {
 					node {
 						_id,

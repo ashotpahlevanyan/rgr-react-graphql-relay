@@ -27,13 +27,23 @@ let Schema = (db) => {
 			id: globalIdField("Store"),
 			linkConnection: {
 				type: linkConnection.connectionType,
-				args: connectionArgs, // first, ... last ...
-				resolve: (_, args) => connectionFromPromisedArray(
-					db.collection('links').find({})
+				args: {
+					...connectionArgs,
+					query: {type: GraphQLString}
+				},
+				resolve: (_, args) => {
+					let findParams = {};
+					if(args.query) {
+						findParams.title = new RegExp(args.query, 'i');
+					}
+					return connectionFromPromisedArray(
+					db.collection('links')
+						.find(findParams)
 						.sort({createdAt: -1})
 						.limit(args.first).toArray(),
 					args
-				)
+					)
+				}
 			}
 		})
 	});
