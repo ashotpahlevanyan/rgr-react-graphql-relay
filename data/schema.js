@@ -11,6 +11,8 @@ import {
 
 import {
 	globalIdField,
+	fromGlobalId,
+	nodeDefinitions,
 	connectionDefinitions,
 	connectionArgs,
 	connectionFromPromisedArray,
@@ -19,7 +21,26 @@ import {
 
 
 let Schema = (db) => {
-	let store = {};
+	class Store {}
+
+	let store = new Store();
+
+	let nodeDefs = nodeDefinitions(
+		(globalId) => {
+			let {type} = fromGlobalId(globalId);
+			if(type === 'Store') {
+				return store;
+			}
+			return null;
+		},
+		(obj) => {
+			if(obj instanceof Store) {
+				return storeType;
+			}
+
+			return null;
+		}
+	);
 
 	let storeType = new GraphQLObjectType({
 		name: 'Store',
@@ -45,7 +66,8 @@ let Schema = (db) => {
 					)
 				}
 			}
-		})
+		}),
+		interfaces: [nodeDefs.nodeInterface]
 	});
 
 	let linkType = new GraphQLObjectType({
@@ -99,6 +121,7 @@ let Schema = (db) => {
 		query: new GraphQLObjectType({
 			name: 'Query',
 			fields: () => ({
+				node : nodeDefs.nodeField,
 				store: {
 					type: storeType,
 					resolve: () => store
