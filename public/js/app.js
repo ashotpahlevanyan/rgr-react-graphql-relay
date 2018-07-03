@@ -353,16 +353,27 @@ var Main = function (_React$Component) {
 	_inherits(Main, _React$Component);
 
 	function Main() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
 		_classCallCheck(this, Main);
 
-		return _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).apply(this, arguments));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.setLimit = function (e) {
+			var newLimit = Number(e.target.value);
+			_this.props.relay.setVariables({ limit: newLimit });
+		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	_createClass(Main, [{
 		key: 'render',
 		value: function render() {
-			var content = this.props.store.links.slice(0, this.props.limit).map(function (link) {
-				return _react2.default.createElement(_Link2.default, { key: link._id, link: link });
+			var content = this.props.store.linkConnection.edges.map(function (edge) {
+				return _react2.default.createElement(_Link2.default, { key: edge.node.id, link: edge.node });
 			});
 			return _react2.default.createElement(
 				'div',
@@ -371,6 +382,21 @@ var Main = function (_React$Component) {
 					'h3',
 					null,
 					'Links'
+				),
+				'Showing: \xA0',
+				_react2.default.createElement(
+					'select',
+					{ onChange: this.setLimit },
+					_react2.default.createElement(
+						'option',
+						{ value: '100' },
+						'100'
+					),
+					_react2.default.createElement(
+						'option',
+						{ value: '200', selected: true },
+						'200'
+					)
 				),
 				_react2.default.createElement(
 					'ul',
@@ -387,39 +413,15 @@ var Main = function (_React$Component) {
 // Declare the data requirements for this component
 
 
-Main.propTypes = {
-	limit: _propTypes2.default.number
-};
-Main.defaultProps = {
-	limit: 2
-};
 Main = _classic2.default.createContainer(Main, {
+	initialVariables: {
+		limit: 10
+	},
 	fragments: {
 		store: function store() {
-			return function (RQL_0) {
-				return {
-					children: [{
-						children: [].concat.apply([], [{
-							fieldName: '_id',
-							kind: 'Field',
-							metadata: {},
-							type: 'String'
-						}, _classic2.default.QL.__frag(RQL_0)]),
-						fieldName: 'links',
-						kind: 'Field',
-						metadata: {
-							canHaveSubselections: true,
-							isPlural: true
-						},
-						type: 'Link'
-					}],
-					id: _classic2.default.QL.__id(),
-					kind: 'Fragment',
-					metadata: {},
-					name: 'Main_StoreRelayQL',
-					type: 'Store'
-				};
-			}(_Link2.default.getFragment('link'));
+			return function () {
+				throw new Error('Relay transform error ``You supplied a GraphQL document named `Main` that uses template substitution for an argument value, but variable substitution has not been enabled.`` in file `/Users/ashotpahlevanyan/MyProjects/rogerreactgraphrelay/src/components/Main.js`. Try updating your GraphQL schema if an argument/field/type was recently added.');
+			}();
 		}
 	}
 });

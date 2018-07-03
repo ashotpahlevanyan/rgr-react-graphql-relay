@@ -15,23 +15,27 @@ const Port = process.env.port || 3000;
 let db;
 
 (async () => {
-	let connection = await MongoClient.connect(MONGO_URL, { useNewUrlParser: true });
-	db = connection.db('rgrjs');
+	try {
+		let connection = await MongoClient.connect(MONGO_URL, {useNewUrlParser: true});
+		db = connection.db('rgrjs');
 
-	let schema = Schema(db);
+		let schema = Schema(db);
 
-	app.use('/graphql', GraphQLHTTP({
+		app.use('/graphql', GraphQLHTTP({
 			schema,
 			graphiql: true
-	}));
+		}));
 
-	app.listen(Port, () => console.log(`App listening on port ${Port}`));
+		app.listen(Port, () => console.log(`App listening on port ${Port}`));
 
-	// generate the schema
-	let json = await graphql(schema, introspectionQuery);
-	fs.writeFile('./data/schema.json', JSON.stringify(json, null, 2), err => {
-		if (err) throw err;
+		// generate the schema
+		let json = await graphql(schema, introspectionQuery);
+		fs.writeFile('./data/schema.json', JSON.stringify(json, null, 2), err => {
+			if (err) throw err;
 
-		console.log('Json schema created');
-	});
+			console.log('Json schema created');
+		});
+	} catch (e) {
+		console.log(e);
+	}
 })();

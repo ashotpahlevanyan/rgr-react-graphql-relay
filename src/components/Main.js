@@ -5,23 +5,23 @@ import Link from './Link';
 
 
 class Main extends React.Component {
-
-	static propTypes = {
-		limit: PropTypes.number
+	setLimit = (e) => {
+		let newLimit = Number(e.target.value);
+		this.props.relay.setVariables({limit: newLimit});
 	};
-
-	static defaultProps = {
-		limit: 2
-	};
-
 	render() {
-		let content = this.props.store.links.slice(0, this.props.limit).map((link) => {
+		let content = this.props.store.linkConnection.edges.map(edge => {
 			return (
-			<Link key={link._id} link={link} />);
+			<Link key={edge.node.id} link={edge.node} />);
 		});
 		return (
 			<div>
 				<h3>Links</h3>
+				Showing: &nbsp;
+				<select onChange={this.setLimit}>
+					<option value="100">100</option>
+					<option value="200" selected>200</option>
+				</select>
 				<ul>
 					{content}
 				</ul>
@@ -32,12 +32,19 @@ class Main extends React.Component {
 
 // Declare the data requirements for this component
 Main = Relay.createContainer(Main, {
+	initialVariables : {
+		limit: 10
+	},
 	fragments: {
 		store: () => Relay.QL`
 		fragment on Store {
-			links {
-				_id,
-				${Link.getFragment('link')}
+			linkConnection (first: ${limit}) {
+				edges {
+					node {
+						_id,
+						${Link.getFragment('link')}
+					}
+				}
 			}
 		}
 		`

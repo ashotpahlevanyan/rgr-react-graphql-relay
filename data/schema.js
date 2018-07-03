@@ -3,8 +3,20 @@ import {
 	GraphQLObjectType,
 	GraphQLInt,
 	GraphQLString,
-	GraphQLList
+	GraphQLList,
+	GraphQLNonNull,
+	GraphQLID,
+	MutationWith
 } from 'graphql';
+
+import {
+	globalIdField,
+	connectionDefinitions,
+	connectionArgs,
+	connectionFromPromisedArray,
+	mutationWithClientMutationId,
+} from 'graphql-relay';
+
 
 let Schema = (db) => {
 	let store = {};
@@ -12,9 +24,14 @@ let Schema = (db) => {
 	let storeType = new GraphQLObjectType({
 		name: 'Store',
 		fields: () => ({
-			links: {
-				type: new GraphQLList(linkType),
-				resolve: () => db.collection('links').find({}).toArray()
+			id: globalIdField("Store"),
+			linkConnection: {
+				type: linkConnection.connectionType,
+				args: connectionArgs, // first, ... last ...
+				resolve: (_, args) => connectionFromPromisedArray(
+					db.collection('links').find({}).limit(args.first).toArray(),
+					args
+				)
 			}
 		})
 	});
@@ -22,13 +39,41 @@ let Schema = (db) => {
 	let linkType = new GraphQLObjectType({
 		name: 'Link',
 		fields: () => ({
-			_id: { type: GraphQLString },
+			id: {
+				type: new GraphQLNonNull(GraphQLID),
+				resolve: (obj) => obj._id
+			},
 			title: { type: GraphQLString },
 			url: { type: GraphQLString }
 		})
 	});
 
+	let linkConnection = connectionDefinitions({
+		name: 'Link',
+		nodeType: linkType
+	});
 
+	let createLinkMutation = mutationWithClientMutationId({
+		name: 'CreateLink',
+		inputFields: {
+			title: { type: new GraphQLNonNull(GraphQLString)},
+			url: { type: new GraphQLNonNull(GraphQLString)}
+		},
+		outputFields: {
+			linkEdge: {
+				type: linkConnection.edgeType,
+				resolve: (obj) => ({ node: obj.ops[0], cursor: obj.insertedId})
+			},
+			store: {
+				type: storeType,
+				resolve: () => store
+			}
+		},
+
+		mutateAndGetPayload: ({title, url}) => {
+			return db.collection("links").insertOne({title, url});
+		}
+	});
 
 	let schema = new GraphQLSchema({
 		query: new GraphQLObjectType({
@@ -39,6 +84,13 @@ let Schema = (db) => {
 					resolve: () => store
 				}
 			})
+		})
+	});
+
+	let mutation = new GraphQLObjectType({
+		name: 'Mutation',
+		fields: () => ({
+			createLink: createLinkMutation
 		})
 	});
 
